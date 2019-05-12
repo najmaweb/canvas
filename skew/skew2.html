@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+    </head>
+<body>
+    <button class="btn" id="btnuploader">Upload<span class="ws-upload"></span></button>
+    <input type="file" id="btnLoadImage"/>
+    <canvas id="obj" width="800px" height="600px"></canvas>
+<script>
+    var c=document.getElementById('obj');
+    var ctx=c.getContext('2d');
+    ctx.transform(1,0.51,0,1,0,0);
+    ctx.fillStyle='lightblue';
+    ctx.fillRect(50,50,250,100);
+    ctx.fillStyle='red';
+    ctx.font='30px Arial';
+    ctx.fillText('Transform', 60,80);
+</script>
+<script>
+    $(document).ready(function(){
+        console.log("Document ready");
+        $("#btnLoadImage").change(function(evt){
+        var input = evt.target,
+            filereader = new FileReader();
+        filereader.onloadend = function(){
+            console.log('filereaderresult',filereader.result);
+            imgsrc = filereader.result;
+        }
+        filereader.readAsDataURL(input.files[0]);
+});
+        $("#btnuploader").click(function(){
+        mycursor = "uploadimage";
+        $("#btnLoadImage").click();
+});
+    });
+</script>
+</body>
+</html>

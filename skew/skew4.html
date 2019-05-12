@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+    </head>
+    <body>
+        <input type="file" id="inp">
+        <img src="../assets/SFC-Warriors-2018-Finals-Game2-Main-Cover-Half.jpg" alt="" id="omg" style="display:none">
+        <canvas id="canvas"></canvas>
+        <script>
+            (function($){
+                var canvas = $('#canvas').get(0);
+                $("#inp").change(function(){
+                    var img = new Image();
+                    img.onload = draw;
+                    img.onerror = failed;
+                    img.src = URL.createObjectURL(this.files[0]);
+                });
+            }(jQuery))
+            function loadImage(){
+            }
+            function draw() {
+                var ctx = canvas.getContext('2d');
+                //ctx.transform(1,0.51,0,1,0,0);
+                canvas.width = this.width;
+                canvas.height = this.height;
+                var myimg = document.getElementById('omg');
+                ctx.drawImage(myimg, 0, 0);
+                let horisontal_scaling = 0.5;
+                let horisontal_skewing = 0.1;
+                let vertical_skewing = 0;
+                let vertical_scaling = 0.5;
+                let horisontal_moving = 0;
+                let vertical_moving = 0;
+                ctx.transform(
+                    horisontal_scaling,
+                    horisontal_skewing,
+                    vertical_skewing,
+                    vertical_scaling,
+                    horisontal_moving,
+                    vertical_moving);
+                //ctx.drawImage(this, 0,0);
+                let startx = 0;
+                let starty = 0;
+                let swidth = this.width;
+                let sheight = this.height;
+                let x = 0;
+                let y = 0;
+                let width = 200;
+                let height = 200;
+                ctx.drawImage(this, 
+                startx,
+                starty, 
+                swidth, 
+                sheight, 
+                x,
+                y,
+                width,
+                height);
+            }
+            function failed() {
+                console.error("The provided file couldn't be loaded as an Image media");
+            }
+        </script>
+    </body>
+</html>
