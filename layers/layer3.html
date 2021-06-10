@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="layer3.css" />
+<div id="main">
 <div id="stage">
   <canvas id="ui-layer" width="480" height="320"></canvas>
   <canvas id="game-layer" width="480" height="320"></canvas>
@@ -22,6 +23,7 @@
     <tbody></tbody>
   </table>
 </div>
+</div>
 <button id="mover">Move</button>
 <button id="green">Green</button>
 <button id="createnew">New</button>
@@ -39,6 +41,7 @@
     gamelayercontext.fillRect(30,30,40,40);
     var uilayercontext = uilayer.getContext('2d');
     uilayercontext.fillStyle='rgb(0,200,255)';
+    uilayercontext.fillRect(90,90,50,50);
   }
   else 
   {   
@@ -131,7 +134,7 @@
       gamelayercontext.fillStyle='red';
       gamelayercontext.fillRect(30,30,40,40);
       })
-      $('#color').change(function(){
+      $('#main').on("change","#color",function(){
         id = $('#objects tbody tr.selected td').text();
         console.log("ID",id);
         console.log("Color",$(this).val())
