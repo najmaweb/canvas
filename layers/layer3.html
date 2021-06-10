@@ -1,0 +1,146 @@
+<link rel="stylesheet" href="layer3.css" />
+<div id="stage">
+  <canvas id="ui-layer" width="480" height="320"></canvas>
+  <canvas id="game-layer" width="480" height="320"></canvas>
+  <canvas id="background-layer" width="480" height="320"></canvas>
+</div>
+<label for="newObjectId"></label><input type="text" id="newObjectId">
+<select name="color" id="color">
+  <option value="red">Red</option>
+  <option value="white">White</option>
+  <option value="brown">Brown</option>
+  <option value="green">Green</option>
+  <option value="blue">Blue</option>
+  <option value="gold">Gold</option>
+  <option value="black">Black</option>
+</select>
+<div>
+  <table id='objects'>
+    <thead>
+      <th>Object</th>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+<button id="mover">Move</button>
+<button id="green">Green</button>
+<button id="createnew">New</button>
+<button id="removenew">Remove</button>
+<button id="reload">Reload</button>
+<script src="../assets/jquery-3.5.1.slim.min.js"></script>
+<script>
+  stage = document.getElementById('stage');
+  var gamelayer = document.getElementById('game-layer'); 
+  var uilayer = document.getElementById('ui-layer'); 
+  if (gamelayer.getContext)
+  {   
+    var gamelayercontext = gamelayer.getContext('2d');
+    gamelayercontext.fillStyle='rgb(0,0,255)';
+    gamelayercontext.fillRect(30,30,40,40);
+    var uilayercontext = uilayer.getContext('2d');
+    uilayercontext.fillStyle='rgb(0,200,255)';
+  }
+  else 
+  {   
+  // canvas-unsupported code here
+  }
+
+  (function($){
+    ui = {
+      X : 40,
+      Y : 40,
+      Width : 50,
+      Height : 50
+    }
+    objs = [];
+    stage.addEventListener('click',function(event){
+      clickObject();
+    })
+    gamelayer.addEventListener('click',function(event){
+      console.log('Canavs',event.screenX,event.screenY);
+    },false);
+    gamelayer.addEventListener('mouseover',function(){
+      console.log('MouseOver');
+    })
+    $("#reload").click(function(){
+      arr = Array.from(stage.children);
+      $('#objects tbody').empty();
+      arr.forEach(function(item,index){
+        $('#objects tbody').append('<tr><td>'+item.getAttribute('id')+'</td></tr>');
+        console.log('Item',item.getAttribute('id'));
+      })
+    });
+    $('#objects').on('click','tbody tr',function(){
+      $('#objects tbody tr').removeClass('selected');
+      $(this).addClass('selected');
+    })
+    createObj = function(obj){
+      var x = document.createElement('canvas');
+      y = x.getContext('2d');
+      att = document.createAttribute('id');
+      att.value = obj.id
+      x.setAttributeNode(att);
+      y.fillStyle = 'rgb(200,200,200)';
+      y.fillRect(10,10,20,20);
+      stage.appendChild(x);
+      objs.push(1);
+    }
+    removeObj = function(){
+      console.log("delete invoked");
+      if(stage.children.length>0){
+        stage.removeChild(stage.children[0]);
+      }
+    }
+    clickObject = function(){
+      arr = Array.from(stage.children);
+      arr.forEach(function(item,index){
+        console.log('Item',item);
+      });
+    }
+    clearContext = function(obj){
+      obj.context.clearRect(0, 0, 480, 320);
+    }
+    moveui = function(obj){
+      obj.context.fillRect(obj.w,obj.x,obj.y,obj.z);  
+    }
+    clearContext({context:uilayercontext});
+    moveui({context: uilayercontext,w:ui.X,x:ui.Y,y:ui.Width,z:ui.Height});      
+    $("#createnew").click(function(){
+      createObj({id:$('#newObjectId').val()});
+    })
+    $("#removenew").click(function(){
+      removeObj();
+    });
+    $("#mover").click(function(){
+      clearContext({context:uilayercontext});
+      ui.X+=10;ui.Y+=10;ui.Width+=10;ui.Height+=10;
+      moveui({context: uilayercontext, w:ui.X,x:ui.Y,y:ui.Width,z:ui.Height});
+    });
+    $("#green").click(function(){
+      clearContext({context:gamelayercontext});
+      ui.X+=10;ui.Y+=10;ui.Width+=10;ui.Height+=10;
+      moveui({context: gamelayercontext, w:ui.X,x:ui.Y,y:ui.Width,z:ui.Height});
+    });
+    $('canvas').on('mouseover',function(){
+      let that = $(this);
+      let id = $(this).attr("id");
+      console.log('canvas hovered',id);
+      //that.fillStyle = 'rgb(0,200,155)';
+      z = document.getElementById(id);
+      var gamelayercontext = z.getContext('2d');
+      gamelayercontext.fillStyle='red';
+      gamelayercontext.fillRect(30,30,40,40);
+      })
+      $('#color').change(function(){
+        id = $('#objects tbody tr.selected td').text();
+        console.log("ID",id);
+        console.log("Color",$(this).val())
+        var context = $("#stage #"+id)[0].getContext('2d');
+//        z = document.getElementById(id);
+        //var context = z.getContext('2d');
+        context.fillStyle = $(this).val();
+        context.fillRect(30,30,40,40);
+      })
+  }(jQuery))
+
+</script>

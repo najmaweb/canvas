@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="layer1.css" />
+<div id="stage">
+  <canvas id="ui-layer" width="480" height="320"></canvas>
+  <canvas id="game-layer" width="480" height="320"></canvas>
+  <canvas id="background-layer" width="480" height="320"></canvas>
+</div>
+<button id="mover">Move</button>
+<button id="green">Green</button>
+<script src="../assets/jquery-3.5.1.slim.min.js"></script>
+<script>
+  var gamelayer = document.getElementById('game-layer'); 
+  var uilayer = document.getElementById('ui-layer'); 
+  //Always check for properties and methods, to make sure your code doesn't break in other browsers.
+  if (gamelayer.getContext)
+  {   
+  var gamelayercontext = gamelayer.getContext('2d');
+  gamelayercontext.fillStyle='rgb(0,0,255)';
+  gamelayercontext.fillRect(30,30,40,40);
+
+
+
+  var uilayercontext = uilayer.getContext('2d');
+  uilayercontext.fillStyle='rgb(0,200,255)';
+  //uilayercontext.fillRect(40,40,50,50);
+  // drawing code here 
+  }
+  else 
+  {   
+  // canvas-unsupported code here
+  }
+
+  (function($){
+    ui = {
+      X : 40,
+      Y : 40,
+      Width : 50,
+      Height : 50
+    }
+    clearContext = function(obj){
+      obj.context.clearRect(0, 0, 480, 320);
+    }
+    moveui = function(obj){
+      obj.context.fillRect(obj.w,obj.x,obj.y,obj.z);  
+    }
+    clearContext({context:uilayercontext});
+    moveui({context: uilayercontext,w:ui.X,x:ui.Y,y:ui.Width,z:ui.Height});      
+
+    $("#mover").click(function(){
+      clearContext({context:uilayercontext});
+      ui.X+=10;ui.Y+=10;ui.Width+=10;ui.Height+=10;
+      moveui({context: uilayercontext, w:ui.X,x:ui.Y,y:ui.Width,z:ui.Height});
+    });
+    $("#green").click(function(){
+      clearContext({context:gamelayercontext});
+      ui.X+=10;ui.Y+=10;ui.Width+=10;ui.Height+=10;
+      moveui({context: gamelayercontext, w:ui.X,x:ui.Y,y:ui.Width,z:ui.Height});
+    });
+
+  }(jQuery))
+
+</script>

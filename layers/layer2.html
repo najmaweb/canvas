@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="layer2.css" />
+<div id="stage">
+  <canvas id="ui-layer" width="480" height="320"></canvas>
+  <canvas id="game-layer" width="480" height="320"></canvas>
+  <canvas id="background-layer" width="480" height="320"></canvas>
+</div>
+<button id="mover">Move</button>
+<button id="green">Green</button>
+<button id="createnew">New</button>
+<button id="removenew">Remove</button>
+<script src="../assets/jquery-3.5.1.slim.min.js"></script>
+<script>
+  stage = document.getElementById('stage');
+  var gamelayer = document.getElementById('game-layer'); 
+  var uilayer = document.getElementById('ui-layer'); 
+  if (gamelayer.getContext)
+  {   
+    var gamelayercontext = gamelayer.getContext('2d');
+    gamelayercontext.fillStyle='rgb(0,0,255)';
+    gamelayercontext.fillRect(30,30,40,40);
+    var uilayercontext = uilayer.getContext('2d');
+    uilayercontext.fillStyle='rgb(0,200,255)';
+  }
+  else 
+  {   
+  // canvas-unsupported code here
+  }
+
+  (function($){
+    ui = {
+      X : 40,
+      Y : 40,
+      Width : 50,
+      Height : 50
+    }
+    gamelayer.addEventListener('click',function(event){
+      console.log('Canavs',event.screenX,event.screenY);
+    },false);
+    createObj = function(){
+      var x = document.createElement('canvas');
+      y = x.getContext('2d');
+      y.fillStyle = 'rgb(200,200,200)';
+      y.fillRect(10,10,20,20);
+      stage.appendChild(x);
+    }
+    removeObj = function(){
+      console.log("delete invoked");
+      if(stage.children.length>0){
+        stage.removeChild(stage.children[0]);
+      }
+    }
+    clearContext = function(obj){
+      obj.context.clearRect(0, 0, 480, 320);
+    }
+    moveui = function(obj){
+      obj.context.fillRect(obj.w,obj.x,obj.y,obj.z);  
+    }
+    clearContext({context:uilayercontext});
+    moveui({context: uilayercontext,w:ui.X,x:ui.Y,y:ui.Width,z:ui.Height});      
+    $("#createnew").click(function(){
+      createObj();
+    })
+    $("#removenew").click(function(){
+      removeObj();
+    });
+    $("#mover").click(function(){
+      clearContext({context:uilayercontext});
+      ui.X+=10;ui.Y+=10;ui.Width+=10;ui.Height+=10;
+      moveui({context: uilayercontext, w:ui.X,x:ui.Y,y:ui.Width,z:ui.Height});
+    });
+    $("#green").click(function(){
+      clearContext({context:gamelayercontext});
+      ui.X+=10;ui.Y+=10;ui.Width+=10;ui.Height+=10;
+      moveui({context: gamelayercontext, w:ui.X,x:ui.Y,y:ui.Width,z:ui.Height});
+    });
+
+  }(jQuery))
+
+</script>
